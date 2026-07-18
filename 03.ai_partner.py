@@ -177,9 +177,6 @@ search_tools = [
 
 # 大标题
 st.title("AI智能伴侣")
-if PUBLIC_MODE:
-    st.info("公开体验版：请勿输入身份证、手机号、住址、账号密码等敏感信息；消息会发送给第三方模型/搜索服务处理，AI 回答可能不准确，请自行核实。")
-# logo
 st.logo("👾")
 # 创建OpenAI客户端
 api_key = get_secret("DEEPSEEK_API_KEY")
@@ -265,7 +262,7 @@ with st.sidebar:
 
 
     st.subheader("伴侣信息")
-    name = st.text_input("姓名",placeholder="请输入伴侣性格",value=st.session_state.name)
+    name = st.text_input("姓名",placeholder="请输入伴侣姓名",value=st.session_state.name)
     if name != st.session_state.name:
         st.session_state.name = name
     nature = st.text_area("性格",placeholder="请输入伴侣性格",value=st.session_state.nature)
