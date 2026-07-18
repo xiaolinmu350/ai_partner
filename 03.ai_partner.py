@@ -12,7 +12,8 @@ load_dotenv(os.path.join(APP_DIR, ".env"))
 
 def get_secret(name, default=None):
     try:
-        return st.secrets.get(name, os.environ.get(name, default))
+        val = st.secrets.get(name, os.environ.get(name, None))
+        return val if val else os.environ.get(name, default)
     except Exception:
         return os.environ.get(name, default)
 
@@ -181,8 +182,14 @@ if PUBLIC_MODE:
 # logo
 st.logo("👾")
 # 创建OpenAI客户端
+api_key = get_secret("DEEPSEEK_API_KEY")
+if not api_key:
+    st.error("❌ DEEPSEEK_API_KEY 未配置，请在 Settings → Secrets 中添加")
+    st.stop()
+
+os.environ["OPENAI_API_KEY"] = api_key
 client = OpenAI(
-    api_key=get_secret("DEEPSEEK_API_KEY"),
+    api_key=api_key,
     base_url=get_secret("DEEPSEEK_BASE_URL") or get_secret("DEEPSEEK_API_BASE") or "https://api.deepseek.com"
 )
 tavily_api_key = get_secret("TAVILY_API_KEY")
