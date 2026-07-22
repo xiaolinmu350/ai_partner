@@ -3,7 +3,7 @@ import os
 from openai import OpenAI
 from tavily import TavilyClient
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import json
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -65,9 +65,11 @@ def get_session_time_name():
 
 
 def get_current_datetime_context():
-    now = datetime.now()
+    """返回北京时间（UTC+8）"""
+    utc_now = datetime.now(timezone.utc)
+    beijing_now = utc_now + timedelta(hours=8)
     weekday_names = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
-    return now.strftime(f"%Y年%m月%d日 %H:%M:%S，{weekday_names[now.weekday()]}")
+    return beijing_now.strftime(f"%Y年%m月%d日 %H:%M:%S，{weekday_names[beijing_now.weekday()]}")
 # 保存会话信息函数
 def save_session():
     if PUBLIC_MODE:
